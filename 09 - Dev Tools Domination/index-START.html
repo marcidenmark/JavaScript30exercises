@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×Click on to make green×</p>
+  <!-- This is done inline. You can also add an event listener. -->
+
+  <!-- you want to know where a js is in the code. go to google chrome tools and
+  right click on tag
+  BREAK ON
+  ATTRIBUTE NOTIFIATIONS
+  THEN CLIDK ON THE BLUE BUTTON and it will show the JS. -->
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'Hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = 'green';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    console.log('hello');
+
+    // Interpolated
+    // interpolation:
+       console.log('hello I am %s string! Where the word %s is interpolated twice!', 'cool', 'cool');
+       // or the new E6 way with back ticks:
+       // console.log(`Hello I am a ${var}`) -- this didn't work for me
+
+    // Styled %c
+    console.log('%c Create the style of this text in the console!', 'font-size:36px; background:pink; text-shadow:1px 1px grey');
+
+    // warning!
+    console.warn('I coded a warning here with console.warn!');
+
+    // Error :|
+    console.error('I coded a console.error here.');
+
+    // Info
+    console.info('With console.info you can write a message you want to show up')
+
+    // Testing
+    console.info('console.assert checksi if things are wrong/NOT true')
+
+    // console.assert(1 === 2, 'this assert ran because 1 does not equal 2');
+    const p = document.querySelector('p')
+    // console.assert(p.classList.contains('ouch'), 'No it doesnt');
+    // console.assert(1===1,);
+    // only runs if something is wrong.
+    // So if you want to test for something then write the code and if nothing shows up in the window, that means it was true. Otherwise it will run the assert as an error, and you know the statement your were testing is false.
+    //
+    //
+
+    // clearing
+    // console.clear will clear the console. It's anoying because then you don't know what happened. Maybe good if you want to keep your code secret.?
+
+    // Viewing DOM Elements
+    console.log(p);//shows the element
+    console.dir(p);// shows the info about the element
+
+    // Grouping together and for each
+    // This one is awesome!
+    dogs.forEach(dog => {
+     console.log(`This is ${dog.name}`);
+     console.log(`${dog.name} is ${dog.age} years old.`);
+     console.log(`${dog.name} is ${dog.age * 7} dog years old.`);
+    });
+
+     dogs.forEach(dog => {
+     console.group(`${dog.name}`);
+     console.log(`This is ${dog.name}`);
+     console.log(`${dog.name} is ${dog.age} years old.`);
+     console.log(`${dog.name} is ${dog.age * 7} dog years old.`);
+     console.groupEnd(`${dog.name}`);
+    });
+
+     dogs.forEach(dog => {
+     console.groupCollapsed(`${dog.name}`);
+     console.log(`This is ${dog.name}`);
+     console.log(`${dog.name} is ${dog.age} years old.`);
+     console.log(`${dog.name} is ${dog.age * 7} dog years old.`);
+     console.groupEnd(`${dog.name}`);
+    });
+
+    // counting
+    console.count('Marci');
+    console.count('Marci');
+    console.count('Marci');
+    console.count('Jens');
+    console.count('Jens');
+    console.count('Marci');
+
+    // timing
+    console.time('fetching data');
+    fetch('https://api.github.com/users/wesbos')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetching data');
+        console.log(data);
+      });
+
+      console.table(dogs);
+
+  </script>
+</body>
+</html>

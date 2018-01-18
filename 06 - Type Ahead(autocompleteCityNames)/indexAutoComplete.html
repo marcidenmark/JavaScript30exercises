@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Fill cities.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="Type the name of a city or state here">
+    <ul class="suggestions">
+      <li></li><!-- the city name will come in this box -->
+      <li> </li> <!-- the state name will come in this box -->
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+const cities = [];
+fetch(endpoint)
+ .then(blob => blob.json())
+ .then(data => cities.push(...data))
+
+ function findMatches(wordToMatch, cities) {
+  return cities.filter(place => {
+   const regex = new RegExp(wordToMatch, 'gi');
+   return place.city.match(regex) || place.state.match(regex)
+  });
+ }
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+
+ function displayMatches() {
+  // console.log(this.value); // then look for the selector in the html. see below.
+  const matchArray = findMatches(this.value, cities);
+  // console.log(matchArray);
+  //first we'll loop over it
+  const html = matchArray.map(place => {
+   const regex = new RegExp(this.value,'gi');
+   const cityName = place.city.replace(regex, `<span class="hl"> ${this.value} </span>`);
+
+   const stateName = place.state.replace(regex, `<span class="hl"> ${this.value} </span>`);
+
+
+   return `
+    <li>
+     <span class="name">${cityName}, ${stateName}</span>
+     <span class="population">${numberWithCommas(place.population)} </span>
+    </li>
+   `;
+  }).join('');
+   //but the map returns an array. so, we .join and get one long string:
+
+
+  // now we've mapped over the array
+  suggestions.innerHTML = html;  // we are calling suggestions from below
+ }
+
+// then look for the selector in the html
+const searchImput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchImput.addEventListener('change', displayMatches);
+searchImput.addEventListener('keyup', displayMatches);
+
+
+
+
+</script>
+  </body>
+</html>
+
+
+<!-- prom means promise
+blob here means blob of data
+... means spread
+spread into the push method.
+how to put a variable into a regular expression
+  g will be global i will be insensitive (case insensitive)
+  the vaiable is "wordToMatch"
+
+  so in console you can type: findMatches('bos', cities) the cities here is the cities array. we are passing the cities array into it.
+  A 'change' event only fires when you click away from the imput, so we need to add a keyup
+
+  ``back ticks then i start writing html
+-->
